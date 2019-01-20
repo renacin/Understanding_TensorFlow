@@ -65,7 +65,7 @@ min_delta = 0.001
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Get Data
-df = pd.read_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/TensorFlow_PolynomialRegression/Data/Temp_Data.csv")
+df = pd.read_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/Understanding_TensorFlow/Data/Temp_Data.csv")
 
 # Shuffle Data
 data_df = df[["Time", "Temp"]]

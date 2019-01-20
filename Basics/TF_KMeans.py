@@ -50,7 +50,7 @@ max_elbow = 11
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Get Data
-df = pd.read_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/TensorFlow_KMeans/Data/Petal_Data.csv")
+df = pd.read_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/Understanding_TensorFlow/Data/Petal_Data.csv")
 data = df[["Sepal_L", "Sepal_W", "Petal_L", "Petal_W"]]
 
 # Implement Max Score Standardization
@@ -80,4 +80,4 @@ classified_df["Classifi"] = y_kmeans
 print(classified_df)
 
 # Write To CSV
-classified_df.to_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/TensorFlow_KMeans/Data/Classified_Data.csv")
+classified_df.to_csv("C:/Users/renac/Documents/Programming/Python/Tensorflow/Understanding_TensorFlow/Data/Classified_Data.csv")
