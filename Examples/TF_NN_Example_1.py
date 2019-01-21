@@ -10,6 +10,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 import pandas as pd
+from sklearn.metrics import r2_score
 
 # ----------------------------------------------------------------------------------------------------------------------
 """
@@ -55,29 +56,49 @@ train_stats = train_dataset.describe().transpose()
 
 # Create Labels
 train_labels = train_dataset.pop('Mpg')
-test_labels = test_dataset.pop('Mpg')
+test_labels = test_dataset.pop('Mpg').tolist()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Build Model
 def build_model():
   model = keras.Sequential([
-    layers.Dense(64, activation=tf.nn.relu, input_shape=[len(train_dataset.keys())]),
-    layers.Dense(64, activation=tf.nn.relu),
+    layers.Dense(50, activation=tf.nn.relu, input_shape=[len(train_dataset.keys())]),
+    layers.Dense(50, activation=tf.nn.relu),
+    layers.Dense(50, activation=tf.nn.relu),
     layers.Dense(1)
   ])
 
-  optimizer = tf.train.RMSPropOptimizer(0.001)
+  optimizer = tf.train.AdamOptimizer(0.001)
   model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
 
   return model
 
 # Fit Model
 model = build_model()
-model.fit(train_dataset, train_labels, epochs=1000)
+history = model.fit(train_dataset, train_labels, epochs=1000, validation_split = 0.2, verbose=0)
+hist = pd.DataFrame(history.history)
 
-# Interpret Accuracy
-scores = model.evaluate(test_dataset, test_labels)
+# Make Predictions
+test_predictions = model.predict(test_dataset).flatten()
 
-for val in range(len(scores)):
-    print((model.metrics_names[val], scores[val]))
+# Find R Squared
+r_squared = round(r2_score(test_labels, test_predictions), 4)
+
+if r_squared < 0:
+    print("R-Squared: Poor Model")
+else:
+    print("R-Squared: {0}".format(r_squared))
+
+# Save The Model
+path = "C:/Users/renac/Documents/Programming/Python/Tensorflow/Understanding_TensorFlow/Model_Saves/"
+
+try:
+    model_json = model.to_json()
+    with open(path + "CarMPG_Model.json", "w") as json_file:
+        json_file.write(model_json)
+
+    model.save_weights("CarMPG_Model.h5")
+    print("Saved Model")
+except:
+    print("Error Could Not Save Model")
 # ----------------------------------------------------------------------------------------------------------------------
